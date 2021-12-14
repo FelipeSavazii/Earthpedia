@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br /><br />
+    <h1><a href="#">{% block title %} Perfil de {{ users['name'] }} {% endblock %}</a></h1>
+    <br /><br />
+    <hr />
+    <div align="center">
+      <img class="circle2 div-lado" src="{{ gravatar2 }}">
+      <div align="center" class="box-profile">
+      <p style="text-align: center; font-size: 16px;" class="font-white">{% if users['profile'] == None %}...{% else %}{{ users['profile'] }}{% endif %}</p>
+      </div>
+    </div>
+{% endblock %}
