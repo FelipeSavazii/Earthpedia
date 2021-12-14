@@ -1,0 +1,71 @@
+{% extends 'base-adm.html' %}
+
+{% block content %}
+<br /><br />
+<h1>{% block title %} Editar "{{ post['title'] }}" {% endblock %}</h1>
+<br /><br />
+
+<form method="post">
+    <div class="form-group">
+        <label for="title">Nome do artigo</label>
+        <input type="text" name="title" placeholder="Nome do cliente"
+               class="form-control"
+               value="{{ request.form['title'] or post['title'] }}">
+        </input>
+    </div>
+
+    <div class="form-group">
+        <label for="name">Nome completo</label>
+        <input type="text" name="name" class="form-control" value="{{ post['name'] }}"></input>
+        <label for="content">Informações</label>
+        <textarea type="text" name="content" class="form-control">{{ post['content'] }}</textarea>
+        <label for="images">Imagens</label>
+        <input type="text" name="images" class="form-control" value="{{ post['images'] }}"></input>
+        <label for="date_of_birth">Data de nascimento</label>
+        <input type="text" name="date_of_birth" class="form-control" value="{{ post['date_of_birth'] }}"></input>
+        <label for="locate_of_birth">Local de nascimento</label>
+        <input type="text" name="locate_of_birth" class="form-control" value="{{ post['locate_of_birth'] }}"></input>
+        <label for="nationality">Nacionalidade</label>
+        <input type="text" name="nationality" class="form-control" value="{{ post['nationality'] }}"></input>
+        <label for="spouse">Cônjuge</label>
+        <input type="text" name="spouse" class="form-control" value="{{ post['spouse'] }}"></input>
+        <label for="affiliations">Afiliações</label>
+        <input type="text" name="affiliations" class="form-control" value="{{ post['affiliations'] }}"></input>
+        <label for="occupation">Ocupações</label>
+        <input type="text" name="occupation" class="form-control" value="{{ post['occupation'] }}"></input>
+        <label for="partner">Parceiros</label>
+        <input type="text" name="partner" class="form-control" value="{{ post['partner'] }}"></input>
+        <label for="mother">Mãe</label>
+        <input type="text" name="mother" class="form-control" value="{{ post['mother'] }}"></input>
+        <label for="father">Pai</label>
+        <input type="text" name="father" class="form-control" value="{{ post['father'] }}"></input>
+        <label for="knows_as">Conhecido(a) como</label>
+        <input type="text" name="knows_as" class="form-control" value="{{ post['knows_as'] }}"></input>
+        <label for="kinship">Parentesco</label>
+        <input type="text" name="kinship" class="form-control" value="{{ post['kinship'] }}"></input>
+        <label for="date_of_death">Data da morte</label>
+        <input type="text" name="date_of_death" class="form-control" value="{{ post['date_of_death'] }}"></input>
+        <label for="locate_of_death">Local da morte</label>
+        <input type="text" name="locate_of_death" class="form-control" value="{{ post['locate_of_death'] }}"></input>
+        <label for="genre">Gênero musical</label>  
+        <input type="text" name="genre" class="form-control" value="{{ post['genre'] }}"></input>
+        <label for="years_active">Período de atividade</label>
+        <input type="text" name="years_active" class="form-control" value="{{ post['years_active'] }}"></input>
+        <label for="label">Gravadora</label>
+        <input type="text" name="label" class="form-control" value="{{ post['label'] }}"></input>
+        <label for="website">Site oficial</label>
+        <input type="text" name="website" class="form-control" value="{{ post['website'] }}"></input>
+        <label for="members">Integrantes</label>
+        <textarea type="text" name="members" class="form-control">{{ post['members'] }}</textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Confirmar</button>
+    </div>
+</form>
+<hr>
+<form action="{{ url_for('delete', id=post['id']) }}" method="POST">
+    <input type="submit" value="Excluir artigo"
+            class="btn btn-danger btn-sm"
+            onclick="return confirm('Você tem certeza?')">
+</form>
+{% endblock %}
