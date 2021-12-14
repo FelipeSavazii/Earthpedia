@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div align="center" class="box-top font-white">
+      <h1>{% block title %} Resultados encontrados {% endblock %}</h1>
+      <div align="center">
+          {% for post in postagem %}
+              <p class="p-box"><a href="./{{ post }}">{{ postagem[post] }}</a></p>
+          {% endfor %}
+      </div>
+    </div>
+    <hr />
+{% endblock %}
