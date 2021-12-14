@@ -1,0 +1,73 @@
+{% extends 'base-adm.html' %}
+
+{% block content %}
+<h1>{% block title %} Registrar novo artigo {% endblock %}</h1>
+
+<form method="post">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Etapa 1</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Etapa 2</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Etapa 3</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <label for="title">Nome do artigo</label>
+        <input type="text" name="title" placeholder="Nome do artigo" class="form-control" value="{{ request.form['title'] }}"></input>
+        <label for="name">Nome completo</label>
+        <input type="text" name="name" class="form-control" value="{{ request.form['name'] }}"></input>
+        <label for="knows_as">Conhecido(a) como</label>
+        <input type="text" name="knows_as" class="form-control" value="{{ request.form['knows_as'] }}"></input>
+        <label for="content">Informações</label>
+        <textarea type="text" name="content" class="form-control" value="{{ request.form['content'] }}"></textarea>
+        <label for="images">Imagens</label>
+        <input type="text" name="images" class="form-control" value="{{ request.form['images'] }}"></input>
+        <label for="date_of_birth">Data de nascimento</label>
+        <input type="text" name="date_of_birth" class="form-control" value="{{ request.form['date_of_birth'] }}"></input>
+        <label for="locate_of_birth">Local de nascimento</label>
+        <input type="text" name="locate_of_birth" class="form-control" value="{{ request.form['locate_of_birth'] }}"></input>
+        <label for="date_of_death">Data da morte</label>
+        <input type="text" name="date_of_death" class="form-control" value="{{ request.form['date_of_death'] }}"></input>
+        <label for="locate_of_death">Local da morte</label>
+        <input type="text" name="locate_of_death" class="form-control" value="{{ request.form['locate_of_death'] }}"></input>
+        <label for="nationality">Nacionalidade</label>
+        <input type="text" name="nationality" class="form-control" value="{{ request.form['nationality'] }}"></input>
+      </div>
+      <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <label for="spouse">Cônjuge</label>
+        <input type="text" name="spouse" class="form-control" value="{{ request.form['spouse'] }}"></input>
+        <label for="partner">Parceiros</label>
+        <input type="text" name="partner" class="form-control" value="{{ request.form['partner'] }}"></input>
+        <label for="mother">Mãe</label>
+        <input type="text" name="mother" class="form-control" value="{{ request.form['mother'] }}"></input>
+        <label for="father">Pai</label>
+        <input type="text" name="father" class="form-control" value="{{ request.form['father'] }}"></input>
+        <label for="kinship">Parentesco</label>
+        <input type="text" name="kinship" class="form-control" value="{{ request.form['kinship'] }}"></input>
+      </div>
+      <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+        <label for="affiliations">Afiliações</label>
+        <input type="text" name="affiliations" class="form-control" value="{{ request.form['affiliations'] }}"></input>
+        <label for="occupation">Ocupações</label>
+        <input type="text" name="occupation" class="form-control" value="{{ request.form['occupation'] }}"></input>
+        <label for="genre">Gênero musical</label>  
+        <input type="text" name="genre" class="form-control" value="{{ request.form['genre'] }}"></input>
+        <label for="years_active">Período de atividade</label>
+        <input type="text" name="years_active" class="form-control" value="{{ request.form['years_active'] }}"></input>
+        <label for="label">Gravadora</label>
+        <input type="text" name="label" class="form-control" value="{{ request.form['label'] }}"></input>
+        <label for="website">Site oficial</label>
+        <input type="text" name="website" class="form-control" value="{{ request.form['website'] }}"></input>
+        <label for="members">Integrantes</label>
+        <textarea type="text" name="members" class="form-control" value="{{ request.form['members'] }}"></textarea>
+        <br /><br />
+        <button type="submit" class="btn btn-primary">Criar</button>
+      </div>
+    </div>
+</form>
+{% endblock %}
