@@ -1,0 +1,26 @@
+{% extends 'base-adm.html' %} {% block content %}
+<br /><br />
+    <h1>{% block title %} Usuários {% endblock %}</h1>
+    <br /><br />
+    <hr />
+    {% for user in users %}
+        <div align="center" class="post-main-2 center-2 users">
+          <div align="center">
+            <h4>
+                Nome de usuário:
+            </h4>
+            <h5>
+              {{ user['name'] }}
+            </h5>
+            <h4>
+                E-mail:
+            </h4>
+            <h5>
+                {{ user['email'] }}
+            </h5>
+          </div>
+          <a href="{{ url_for('user_edit', id=user['id']) }}">
+            <span class="badge bg-dark">Editar</span>
+          </a>
+        <hr>
+    {% endfor %}{% endblock %}
