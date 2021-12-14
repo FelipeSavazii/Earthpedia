@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br /><br />
+<h1>{% block title %} Editar {% endblock %}</h1>
+<br /><br />
+
+<form method="POST">
+    <div class="form-group">
+        <label for="profile">Sobre-mim</label>
+        <input type="text" name="profile" class="form-control" value="{{ profile }}"></input>
+        <label for="name">Nome de usuário</label>
+        <input type="username" name="name" class="form-control" value="{{ user }}"></input>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Confirmar</button>
+    </div>
+</form>
+{% endblock %}
