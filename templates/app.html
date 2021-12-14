@@ -1,0 +1,49 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+    <div align="center">
+        <div class="box-search font-white">
+          <h1>Earthpedia</h1>
+          <p class="p-search">Temos o total de {{ numero_de_posts }} artigos </p>
+          <div>
+            <form class="d-flex" action="/search" method="POST">
+              <input class="input-search" name="search" type="search" placeholder="Pesquisar..." aria-label="Pesquisar">        
+              <button class="btn-search" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+          </div>
+        </div>
+    </div>
+    <hr />
+    <div align="center" class="box-top">
+        <h1 class="font-white">Artigos mais conhecidos</h1><br/>
+        {% for post in range(0, 5) %}
+          <div align="center" class="post">
+            <img class="img" src="{{ posts[post]['images'] }}" width="100%" height="100%">
+            <h4><a href="{{ url_for('post', post_id=posts[post]['id']) }}" class="font-white">{{ posts[post]['title'] }}</a></h4>
+          </div>
+        {% endfor %}
+    </div>
+<script>
+    $(document).ready(function(){
+      $('.toast').toast('show');
+    });
+</script>
+{% for message in get_flashed_messages() %}
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+      <div class="toast-container position-absolute top-0 end-0 p-3">
+          <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">
+            <div class="toast-header">
+              <img src="https://cdn.discordapp.com/attachments/918695653566193665/919343719612833872/pngbase64iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAA1BMVEW9ACEmlUDHAAAASElEQVR4nO3BgQAAAADDoPlTXAIVQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwDcaiAAFXD1ujAAAAAElFTkSuQmCC.png" class="rounded me-2" width="20px">
+              <strong class="me-auto">Erro!</strong>
+              <small>Agora mesmo</small>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              {{ message }}
+            </div>
+          </div>
+      </div>
+    </div>
+    <br><br><br>
+{% endfor %}
+{% endblock %}
