@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br /><br />
+    <h1><a href="#">{% block title %} {{ post['title'] }} {% endblock %}</a></h1>
+    <br /><br />
+    <hr />
+    <div class="post-main container-post">
+          <div align="center">
+          </div>
+          <div class="content">
+            {{ post['content']|safe }}
+          </div>
+        </div>
+        <div class="post-informations container-post">
+          <div align="center">
+            <img src="{{ post['images'] }}" class="circle3" width="100%">
+          </div>
+          <br />
+          {% if post['name'] != "None" %}
+              <h3> Nome </h3>
+              <p>{{ post['name'] }}</p>
+          {% endif %}
+          {% if post['knows_as'] != "None" %}
+              <h3> Conhecido(a) como</h3>
+              <p>{{ post['knows_as']|safe }}</p>
+          {% endif %}
+          {% if post['date_of_birth'] != "None" %}
+              <h3> Data de nascimento </h3>
+              <p>{{ post['date_of_birth'] }}</p>
+          {% endif %}
+          {% if post['locate_of_birth'] != "None" %}
+              <h3> Local de nascimento </h3>
+              <p>{{ post['locate_of_birth'] }}</p>
+          {% endif %}
+          {% if post['date_of_death'] != "None" %}
+              <h3> Data da morte </h3>
+              <p>{{ post['date_of_death'] }}</p>
+          {% endif %}
+          {% if post['locate_of_death'] != "None" %}
+              <h3>Local da morte</h3>
+              <p>{{ post['locate_of_death'] }}</p>
+          {% endif %}
+          {% if post['nationality'] != "None" %}
+              <h3> Nacionalidade </h3>
+              <p>{{ post['nationality']|safe }}</p>
+          {% endif %}
+          {% if post['spouse'] != "None" %}
+              <h3> Cônjuge </h3>
+              <p>{{ post['spouse']|safe }}</p>
+          {% endif %}
+          {% if post['partner'] != "None" %}
+              <h3> Parceiros </h3>
+              <p>{{ post['partner']|safe }}</p>
+          {% endif %}
+          {% if post['mother'] != "None" %}
+              <h3> Mãe </h3>
+              <p>{{ post['mother']|safe }}</p>
+          {% endif %}
+          {% if post['father'] != "None" %}
+              <h3> Pai </h3>
+              <p>{{ post['father']|safe }}</p>
+          {% endif %}
+          {% if post['affiliations'] != "None" %}
+              <h3> Afiliações </h3>
+              <p>{{ post['affiliations']|safe }}</p>
+          {% endif %}
+          {% if post['kinship'] != "None" %}
+              <h3> Parentesco </h3>
+              <p>{{ post['kinship']|safe }}</p>
+          {% endif %}
+          {% if post['occupation'] != "None" %}
+              <h3> Ocupações </h3>
+              <p>{{ post['occupation']|safe }}</p>
+          {% endif %}
+          {% if post['years_active'] != "None" %}
+              <h3> Tempo de atividade </h3>
+              <p>{{ post['years_active'] }}</p>
+          {% endif %}
+          {% if post['members'] != "None" %}
+              <h3> Integrantes </h3>
+              <p>{{ post['members']|safe }}</p>
+          {% endif %}
+          {% if post['genre'] != "None" %}
+              <h3> Gênero musical </h3>
+              <p>{{ post['genre'] }}</p>
+          {% endif %}
+          {% if post['label'] != "None" %}
+              <h3> Gravadora </h3>
+              <p>{{ post['label']|safe }}</p>
+          {% endif %}
+          {% if post['website'] != "None" %}
+              <h3> Site oficial </h3>
+              <p>{{ post['website']|safe }}</p>
+          {% endif %}
+        </div>
+    </div>
+{% endblock %}
