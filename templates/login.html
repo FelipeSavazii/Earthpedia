@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <br /><br />
+    <h1 class="title">{% block title %} Login {% endblock %}</h1>
+    <br /><br />
+    <div class="box">
+        <form action="/login" method="POST">
+            <div class="row mb-3">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">E-mail</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="email" name="email" placeholder="Seu e-mail" id="inputEmail3">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Senha</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="password" name="password" placeholder="Sua senha" id="inputPassword3">
+                </div>
+            </div>
+            <script>
+              function red(){
+                window.location.href = "./register"
+              }
+            </script>
+            <button class="btn btn-primary">Entrar</button> 
+        </form>
+        <div align="center">
+          <h2>
+            Você não tem registro? <button class="btn btn-primary" onclick="red()">Registrar</button>
+          </h2>
+        </div>
+    </div>
+</div>
+{% endblock %}
