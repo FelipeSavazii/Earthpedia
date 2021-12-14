@@ -1,0 +1,236 @@
+/* DEFINIÇÕES */
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  height: 100%;
+}
+
+.bg-blue {
+  background: #6397FF;
+}
+
+.font-white {
+  color: white;
+}
+
+h1 {
+  text-align: center;
+}
+
+.center {
+  margin: 30px 0 0 0;
+  text-align: center;
+  font-size: 20px;
+}
+
+p a {
+  color: white !important;
+}
+
+a:hover {
+  color: black !important;
+}
+
+div h3 {
+  font-size: 16px;
+  font-weight: 900;
+}
+
+div p {
+  font-size: 12px;
+}
+
+    /* DEFINIÇÕES DE IMAGEM */
+
+.circle2, .circle3 {
+  border-radius: 10px;  
+}
+
+.circle {
+  background-color: white;
+  border: white solid;
+  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+}
+
+.circle2 {
+  width: 20%;
+  margin: 0 !important;
+  background-color: #ced9e4;
+}
+
+.circle3 {
+  background-color: #6397FF;
+}
+
+.circle img, .circle2 img {
+  width: 100%;
+}
+
+.img {
+  background: #6397FF;
+  border: #6397FF solid;
+  border-radius: 10px;
+  margin: 0 0 10px 0;
+}
+
+/* NAVBAR */
+
+.navbar {
+  margin: 0 15%;
+}
+
+/* BOXs */
+
+
+.box-search, .box-top, .box-profile {
+  border: #6397FF solid;
+  border-radius: 10px;
+  margin: 20px;
+  padding: 10px 0;
+  background: #6397FF;
+}
+
+.box-search h1, .box-search p, .box-top h1 {
+  padding: 5px;
+  margin: 10px 0 0 20px;
+  text-align: left;
+}
+
+/* FORMATAÇÃO DOS ELEMENTOS DAS CAIXAS */
+
+.p-box, .p-box a {
+  padding: 5px;
+  margin: 10px 0 0 20px;
+  color: white !important;
+  text-align: left;
+}
+
+/* PROFILE */
+
+.box-profile {
+  display: inline-block;
+  width: 76.5%;
+}
+
+/* SEARCH */
+
+.input-search {
+  margin: 10px 0 0 20px;
+  padding: 5px;
+  border: #6397FF solid;
+  border-radius: 10px;
+  width: 50%;
+}
+
+.box-search p {
+  font-size: 20px;
+  padding-bottom: 10px;
+}
+
+.btn-search {
+  color: white;
+  padding: 5px;
+  border: #6397FF solid;
+  border-radius: 10px;
+  background: #6397FF;
+}
+
+.button {
+  border: #f8f9fa solid;
+  border-radius: 5px;
+  margin: 20px;
+  padding: 10px 0;
+  width: 10%;
+  background: #ced9e4;
+}
+
+.input {
+  border: black solid;
+  border-radius: 5px;
+  margin: 20px;
+  padding: 10px 5px;
+  width: 50%;
+  background: #ced9e4;
+}
+
+/* TOP */
+
+.box-top img {
+  margin: 10px 0 !important;
+}
+
+/* POSTS */
+
+.post {
+  display: inline-block;
+  width: 19%;
+}
+
+.post h4 {
+  text-align: center;
+}
+
+.post-main {
+  margin: 0 19% 0 0;
+  width: 50%;
+}
+
+.post-informations {
+  color: white;
+  width: 30%;
+  background: #6397FF;
+  padding: 10px;
+  border: #6397FF solid;
+  border-radius: 5px;
+  box-shadow: 10px 5px 5px rgba(0, 0, 0, 0.76);
+}
+
+.coluna-posts div {
+  margin: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* CONTAINERS */
+
+.container {
+  width: 70%;
+}
+
+.container2 {
+  width: 100%;
+}
+
+.container-post {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.container-post h4, .users h4 {
+  margin: 10px 0;
+  text-align: center;
+  color: #6397FF;
+}
+
+.container-post h5, .users h5 {
+  margin: 10px 0;
+  font-size: 20px;
+  text-align: center;
+}
+
+.container-post h6, .users h6 {
+  margin: 10px 0;
+  font-size: 16px;
+  text-align: center;
+  color: #6397FF;
+}
+
+.container-post h5 {
+  color: #6397FF;
+}
