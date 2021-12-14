@@ -1,0 +1,23 @@
+@media only screen and (max-width: 1316px) {
+  .post {
+    display: inline-block;
+    width: 30%;
+  }
+}
+
+@media only screen and (max-width: 835px) {
+  .post {
+    display: block;
+    widows: 20%;
+  }
+
+  .box-top h1 {
+    padding: 5px;
+    margin: 0 20px !important;
+    text-align: center;
+  }
+
+  .post h4 {
+    font-size: 100%;
+  }
+}
