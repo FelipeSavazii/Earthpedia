@@ -12,4 +12,4 @@ Desenvolvedora oficial: [Orizon Studios](https://earthcompany.com.br).
 
 Discord oficial: [Earthpedia](https://earthpedia.com.br/discord).
 
-Site oficial: [https://lion-bot.com](https://earthpedia.com.br).
+Site oficial: [https://earthpedia.com.br/](https://earthpedia.com.br).
