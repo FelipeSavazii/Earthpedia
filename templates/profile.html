@@ -6,9 +6,9 @@
     <br /><br />
     <hr />
     <div align="center">
-      <img class="circle2 div-lado" src="{{ gravatar2 }}">
-      <div align="center" class="box-profile">
-      <p style="text-align: center; font-size: 16px;" class="font-white">{% if users['profile'] == None %}...{% else %}{{ users['profile'] }}{% endif %}</p>
+      <img class="img-profile circle2" src="{{ gravatar2 }}">
+      <div align="center" class="item-profile box-profile">
+      <p style="text-align: center; font-size: 16px;" class="font-white">{% if users['profile'] == None %}...{% else %}{{ users['profile']|safe }}{% endif %}</p>
       </div>
     </div>
 {% endblock %}

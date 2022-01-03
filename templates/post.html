@@ -2,18 +2,19 @@
 
 {% block content %}
     <br /><br />
-    <h1><a href="#">{% block title %} {{ post['title'] }} {% endblock %}</a></h1>
+    <h1 class="#name"><a href="#">{% block title %} {{ post['title'] }} {% endblock %}</a></h1>
     <br /><br />
     <hr />
     <div class="post-main container-post">
           <div align="center">
           </div>
-          <div class="content">
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/8.4.0/markdown-it.js"></script>
+          <div id="preview">
             {{ post['content']|safe }}
           </div>
         </div>
         <div class="post-informations container-post">
-          <div align="center">
+          <div align="center" id="content">
             <img src="{{ post['images'] }}" class="circle3" width="100%">
           </div>
           <br />
@@ -95,4 +96,12 @@
           {% endif %}
         </div>
     </div>
+<script>
+  var mdit = window.markdownit();
+
+  document.getElementById("preview") {
+    var resultado = mdit.render("{{ post['content']|safe }}");
+    preview.innerHTML = resultado;   
+  };
+</script>
 {% endblock %}

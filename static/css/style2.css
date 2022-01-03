@@ -1,11 +1,32 @@
-@media only screen and (max-width: 1316px) {
+@media only screen and (max-width: 1024px) {
+  body {
+      margin: 0 20px;
+  }
+
   .post {
-    display: inline-block;
-    width: 30%;
+    display: block;
+  }
+ .box-top img {
+    margin: 10px !important;
+  }
+  img {
+      align-content: center;
+  }
+  .position-relative {
+      position: inherit !important;
+  }
+  .overflow-hidden {
+      overflow: inherit !important;
+  }
+  .img-responsive img {
+      display: none;
+  }  
+  .post h4 {
+    font-size: 30px;
   }
 }
 
-@media only screen and (max-width: 835px) {
+@media only screen and (max-width: 425px) {
   .post {
     display: block;
     widows: 20%;
@@ -19,5 +40,12 @@
 
   .post h4 {
     font-size: 100%;
+  }
+
+  .container {
+    width: 100%;
+  }
+  .img-responsive img {
+      display: none;
   }
 }

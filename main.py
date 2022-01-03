@@ -4,94 +4,135 @@ from werkzeug.exceptions import abort
 import functools
 from time import sleep
 import uuid, time
+from random import randint, choice
 from libgravatar import Gravatar 
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
 app = Flask(__name__)
 
-app.secret_key = SECRET_KEY
-
+app.secret_key = '...'
 ips = {}
+number_list = {
+  "1": "a",
+  "2": "b",
+  "3": "c",
+  "4": "d",
+  "5": "e",
+  "6": "f",
+  "7": "g",
+  "8": "h",
+  "9": "i",
+  "10": "j",
+  "11": "k",
+  "12": "l",
+  "13": "m",
+  "14": "n",
+  "15": "o",
+  "16": "p",
+  "17": "q",
+  "18": "r",
+  "19": "s",
+  "20": "t",
+  "21": "u",
+  "22": "v",
+  "23": "w",
+  "24": "x",
+  "25": "y",
+  "26": "z",
+}
 
-#GRAVATAR
-def gravatar(mail):
-  try:
-    g = Gravatar(mail)
-    return g.get_image()
-  except:
-    pass
+def new_article(name):
+    webhook = DiscordWebhook(url='...')
+    name_url = name.replace(' ', '%20')
+    embed = DiscordEmbed(title=f'EARTHPEDIA - AVISOS', description=f'O artigo {name} acabou de ser criado, clique [https://earthpedia.com.br/{name_url}](aqui) para dar uma olhadinha no mesmo!', color='0000ff')
+    embed.set_timestamp()
 
-def gravatar2(mail):
-  try:
-    g = Gravatar(mail)
-    return g.get_image(size=500)
-  except:
-    pass
+    webhook.add_embed(embed)
 
-#CONEXÃO DA DATABASE
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+    response = webhook.execute()
 
-def get_db_connection_login():
-    conn = sqlite3.connect('database/database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+def gravatar(mail, type=None):
+    if type == None:
+        try:
+            g = Gravatar(mail)
+            return g.get_image()
+        except:
+            pass
+    elif type == "500x500":
+        try:
+            g = Gravatar(mail)
+            return g.get_image(size=500)
+        except:
+            pass
 
-def get_db_connection_ip():
-    conn = sqlite3.connect('ips/database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+def get_db_connection(type=None):
+    if type == None:
+        conn = sqlite3.connect('database.db')
+        conn.row_factory = sqlite3.Row
+        return conn
+    elif type == "user":
+        conn = sqlite3.connect('user/database.db')
+        conn.row_factory = sqlite3.Row
+        return conn
+    elif type == "ip":
+        conn = sqlite3.connect('ips/database.db')
+        conn.row_factory = sqlite3.Row
+        return conn
 
-#POST
-def get_post(post_id):
-    conn = get_db_connection()
-    post = conn.execute('SELECT * FROM posts WHERE id = ?',
-                        (post_id, )).fetchone()
-    conn.close()
-    if post is None:
-        abort(404)
-    return post
+def get_db_informations(type, args=None, id=None):
+    if type == "post":
+        if id == True:
+            conn = get_db_connection()
+            post = conn.execute('SELECT * FROM posts WHERE id = ?',
+                            (args, )).fetchone()
+            conn.close()
+            if post is None:
+                abort(404)
+            return post
+        else:
+            conn = get_db_connection()
+            post = conn.execute('SELECT * FROM posts WHERE title = ?',
+                            (args, )).fetchone()
+            conn.close()
+            if post is None:
+                abort(404)
+            return post
+    if type == "user":
+        conn = get_db_connection("user")
+        user = conn.execute('SELECT * FROM user WHERE id = ?',
+                          (args, )).fetchone()
+        conn.close()
+        if post is None:
+            abort(404)
+        return user
+    if type == "username":
+        try:
+            yip = request.headers.get('X-Forwarded-For', request.remote_addr)
+            conn = get_db_connection("ip")
+            logins = conn.execute('SELECT * FROM logins').fetchall()
+            conn.close()
+            list_of_ips = {}
+            for login in logins:
+                list_of_ips[login['ip']] = login['id']
+            id = list_of_ips[yip]
+            conn = get_db_connection("user")
+            user = conn.execute('SELECT * FROM user WHERE id = ?', (id, )).fetchone()
+            conn.close()
 
-#USUÁRIO
-def get_user(user_id):
-    conn = get_db_connection_login()
-    user = conn.execute('SELECT * FROM user WHERE id = ?',
-                        (user_id, )).fetchone()
-    conn.close()
-    if post is None:
-        abort(404)
-    return user
+            if user['profile'] == None:
+                lista = [user['name'], user['email'], id, '...']
+            else:
+                lista = [user['name'], user['email'], id, user['profile']]
 
-def get_username():
-  try:
-    yip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    conn = get_db_connection_ip()
-    logins = conn.execute('SELECT * FROM logins').fetchall()
-    conn.close()
-    list_of_ips = {}
-    for login in logins:
-        list_of_ips[login['ip']] = login['id']
-    id = list_of_ips[yip]
-    conn2 = get_db_connection_login()
-    user = conn2.execute('SELECT * FROM user WHERE id = ?', (id, )).fetchone()
-    conn2.close()
+            return lista
+        except:
+            lista = ['visitante', 'None', 'None', '...']
+            return lista
 
-    if user['profile'] == None:
-      lista = [user['name'], user['email'], id, '...']
-    else:
-      lista = [user['name'], user['email'], id, user['profile']]
-
-    return lista
-  except:
-    lista = ['visitante', 'None', 'None', '...']
-    return lista
-
-#LOGIN OBRIGATÓRIO
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        conn = get_db_connection_ip()
+        conn = get_db_connection("ip")
         logins = conn.execute('SELECT * FROM logins').fetchall()
         conn.close()
         yip = request.headers.get('X-Forwarded-For', request.remote_addr)
@@ -106,7 +147,6 @@ def login_required(view):
 
     return wrapped_view
 
-#TOTAL DE POSTS
 def number_of_posts():
     number_of_posts = 0
 
@@ -119,30 +159,50 @@ def number_of_posts():
 
     return number_of_posts
 
-#INDEX
+def posts_sort():
+    all_ids = []
+    list_of_ids = []
+    conn = get_db_connection()
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+    for post in posts:
+        all_ids.append(post['id'])
+    while True:
+        if len(list_of_ids) < 5:
+            number = choice(all_ids)
+            if number in list_of_ids:
+                pass
+            else:
+                list_of_ids.append(number)
+        else:
+            break
+
+    posts_list = []
+
+    for ids in list_of_ids:
+        post = get_db_informations("post", ids, True)
+        posts_list.append(post)
+
+    return posts_list
+
 @app.route('/')
 def index():
-    user = get_username()
-    if user[0] == "visitante":
-        flash('Seja bem-vindo ao nosso site.')
+    user = get_db_informations("username")
 
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts').fetchall()
     conn.close()
 
-    conn2 = get_db_connection_login()
-    users = conn2.execute('SELECT * FROM user').fetchall()
-    conn2.close()
+    conn = get_db_connection("user")
+    users = conn.execute('SELECT * FROM user').fetchall()
+    conn.close()
 
-    user=get_username()
+    return render_template('app.html', posts=posts, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2], posts_sort=posts_sort())
 
-    return render_template('app.html', posts=posts, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2])
-
-#PAG. LOGIN
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     yip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    conn = get_db_connection_ip()
+    conn = get_db_connection("ip")
     logins = conn.execute('SELECT * FROM logins').fetchall()
     conn.close()
     list_of_ips = {}
@@ -154,7 +214,7 @@ def login():
         else:
             return redirect("/")
     if request.method == "POST":
-        conn =  get_db_connection_login()
+        conn =  get_db_connection("user")
         users = conn.execute('SELECT * FROM user').fetchall()
         conn.close()
         try:
@@ -166,7 +226,7 @@ def login():
             try:
                 for user in users:
                     if user['email'] == email and user['password'] == password:
-                        conn = get_db_connection_ip()
+                        conn = get_db_connection("ip")
                         if user['admin'] == "True":
                             conn.execute(
                                 'INSERT INTO logins (ip, id, admin) VALUES (?, ?, ?)',
@@ -190,16 +250,15 @@ def login():
                     'Por favor, verifique os seus dados de login e tente novamente.'
                 )
 
-    user=get_username()
+    user = get_db_informations("username")
 
     return render_template('login.html', numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2])
 
-#PAG. LOGOUT
 @app.route('/logout', methods=('GET', 'POST'))
 def logout():
     try:
         yip = request.headers.get('X-Forwarded-For', request.remote_addr)
-        conn = get_db_connection_ip()
+        conn = get_db_connection("ip")
         conn.execute('DELETE FROM logins WHERE ip = ?', (yip, ))
         conn.commit()
         conn.close()
@@ -211,7 +270,6 @@ def logout():
         return redirect("/")
         pass
 
-#PAG. REGISTRO
 @app.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == "POST":
@@ -223,11 +281,11 @@ def register():
             print(e)
         else:
             try:
-                conn =  get_db_connection_login()
+                conn =  get_db_connection("login")
                 users = conn.execute('SELECT * FROM user WHERE email = ?', (email, )).fetchall()
                 conn.close()
             except Exception as e:
-                conn =  get_db_connection_login()
+                conn =  get_db_connection("login")
                 conn.execute(
                   'INSERT INTO user (email, password, name, admin) VALUES (?, ?, ?, ?)', 
                   (email, password, name, 'False'))
@@ -236,30 +294,33 @@ def register():
             else:
                 flash('Esse e-mail já está sendo utilizado!')
 
-    user=get_username()
+    user = get_db_informations("username")
 
     return render_template('register.html', numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2])
 
-#PAG. ADMIN    
 @app.route('/admin')
 @login_required
 def admin():
+    user = get_db_informations("username")
+
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts').fetchall()
     conn.close()
 
-    return render_template('index.html', posts=posts)
+    conn = get_db_connection("user")
+    users = conn.execute('SELECT * FROM user').fetchall()
+    conn.close()
 
-#RENDERIZAR POSTS
-@app.route('/<int:post_id>')
-def post(post_id):
-    post = get_post(post_id)
+    return render_template('index.html', posts=posts, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2], posts_sort=posts_sort())
 
-    user=get_username()
+@app.route('/<post_name>')
+def post(post_name):
+    post = get_db_informations("post", post_name)
+
+    user = get_db_informations("username")
 
     return render_template('post.html', post=post, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2])
 
-#CRIAR POSTS
 @app.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
@@ -326,6 +387,10 @@ def create():
         except Exception as e:
             print(e)
         else:
+            try:
+                new_article(title)
+            except:
+                pass
             if not title:
                 flash('O titulo da postagem é requirido.')
             elif not name:
@@ -347,13 +412,22 @@ def create():
                 
                 return redirect('/admin')
 
-    return render_template('create.html')
+    user = get_db_informations("username")
 
-#EDITAR POSTS
-@app.route('/<int:id>/edit', methods=('GET', 'POST'))
+    conn = get_db_connection()
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+
+    conn = get_db_connection("user")
+    users = conn.execute('SELECT * FROM user').fetchall()
+    conn.close()
+
+    return render_template('create.html', numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2], posts_sort=posts_sort())
+
+@app.route('/<post_name>/edit', methods=('GET', 'POST'))
 @login_required
-def edit(id):
-    post = get_post(id)
+def edit(post_name):
+    post = get_db_informations("post", post_name)
     if request.method == 'POST':
         try:
             title = request.form['title']
@@ -414,38 +488,45 @@ def edit(id):
             conn = get_db_connection()
             conn.execute(
                 'UPDATE posts SET title = ?, name = ?, content = ?, images = ?, date_of_birth = ?, locate_of_birth = ?, nationality = ?, spouse = ?, affiliations = ?, occupation = ?, partner = ?, mother = ?, father = ?, knows_as = ?, kinship = ?, date_of_death = ?, locate_of_death = ?, genre = ?, years_active = ?, label = ?, website = ?, members = ?'
-                ' WHERE id = ?',
-                (title, name, content, images, date_of_birth, locate_of_birth, nationality, spouse, affiliations, occupation, partner, mother, father, knows_as, kinship, date_of_death, locate_of_death, genre, years_active, label, website, members, id))
+                ' WHERE title = ?',
+                (title, name, content, images, date_of_birth, locate_of_birth, nationality, spouse, affiliations, occupation, partner, mother, father, knows_as, kinship, date_of_death, locate_of_death, genre, years_active, label, website, members, post_name))
             conn.commit()
             conn.close()
             return redirect('/admin')
+                
+    user = get_db_informations("username")
 
-    return render_template('edit.html', post=post)
-
-#DELETAR POSTS
-@app.route('/<int:id>/delete', methods=('POST', ))
-@login_required
-def delete(id):
-    post = get_post(id)
     conn = get_db_connection()
-    conn.execute('DELETE FROM posts WHERE id = ?', (id, ))
+    posts = conn.execute('SELECT * FROM posts').fetchall()
+    conn.close()
+
+    conn = get_db_connection("user")
+    users = conn.execute('SELECT * FROM user').fetchall()
+    conn.close()
+
+    return render_template('edit.html', post=post, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2], posts_sort=posts_sort())
+
+@app.route('/<post_name>/delete', methods=('POST', ))
+@login_required
+def delete(post_name):
+    post = get_db_informations("post", post_name)
+    conn = get_db_connection()
+    conn.execute('DELETE FROM posts WHERE title = ?', (post_name, ))
     conn.commit()
     conn.close()
 
     return redirect('/admin')
 
-#PAG. ARTIGOS (mostrar em órdem alfabética)
 @app.route('/artigos')
 def artigos():
     conn = get_db_connection()
     posts = conn.execute('SELECT * FROM posts ORDER BY title ASC').fetchall()
     conn.close()
 
-    user = get_username()
+    user = get_db_informations("username")
 
-    return render_template('artigos.html', posts=posts, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2])
+    return render_template('artigos.html', posts=posts, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2], number_list=number_list)
 
-#PESQUISAR
 @app.route('/search', methods=('GET', 'POST'))
 def search():
     conn = get_db_connection()
@@ -462,21 +543,14 @@ def search():
         except Exception as e:
             pass
 
-    user = get_username()
+    user = get_db_informations("username")
 
-    return render_template('artigos-search.html', postagem=postagem, numero_de_posts=number_of_posts(), user=user[0], gravatar=gravatar(user[1]), id=user[2])
+    return render_template('artigos-search.html', postagem=postagem, user=user[0], gravatar=gravatar(user[1]), id=user[2])
 
-#
-#
-# USUÁRIOS
-#
-#
-
-#VER TODOS OS USUÁRIOS
 @app.route('/users')
 @login_required
 def users():
-    conn = get_db_connection_login()
+    conn = get_db_connection("login")
     users = conn.execute('SELECT * FROM user').fetchall()
     conn.close()
 
@@ -486,7 +560,7 @@ def users():
 @app.route('/user/<int:id>/edit', methods=('GET', 'POST'))
 @login_required
 def user_edit(id):
-    user = get_user(id)
+    user = get_db_informations("user", id)
     if request.method == 'POST':
         try:
             email = request.form['email']
@@ -496,7 +570,7 @@ def user_edit(id):
             print(e)
         else:
             if not password:
-                conn = get_db_connection_login()
+                conn = get_db_connection("login")
                 conn.execute(
                     'UPDATE user SET email = ?, name = ?'
                     ' WHERE id = ?',
@@ -505,7 +579,7 @@ def user_edit(id):
                 conn.close()
                 return redirect('/users')
             else:
-                conn = get_db_connection_login()
+                conn = get_db_connection("login")
                 conn.execute(
                     'UPDATE user SET email = ?, password = ?, name = ?'
                     ' WHERE id = ?',
@@ -520,31 +594,29 @@ def user_edit(id):
 @app.route('/user/<int:id>/delete', methods=('POST', ))
 @login_required
 def user_delete(id):
-    post = get_user(id)
-    conn = get_db_connection_login()
+    post = get_db_informations("user", id)
+    conn = get_db_connection("login")
     conn.execute('DELETE FROM user WHERE id = ?', (id, ))
     conn.commit()
     conn.close()
 
     return redirect('/users')
 
-#PÁG. DE USUÁRIO
 @app.route('/user/<int:user_id>')
 def profile(user_id):
-    user1 = get_user(user_id)
+    user1 = get_db_informations("user", user_id)
 
-    user2=get_username()
+    user2 = get_db_informations("username")
 
-    return render_template('profile.html', post=post, numero_de_posts=number_of_posts(), user=user2[0], gravatar=gravatar(user2[1]), users = user1, id=user2[2], gravatar2=gravatar2(user1['email']))
+    return render_template('profile.html', post=post, numero_de_posts=number_of_posts(), user=user2[0], gravatar=gravatar(user2[1]), users = user1, id=user2[2], gravatar2=gravatar(user1['email'], "500x500"))
 
-#EDITAR USUÁRIO
 @app.route('/user/edit/', methods=('GET', 'POST'))
 def user_edit_main():
-    user=get_username()
+    user = get_db_informations("username")
 
     if user[0] == 'visitante':
         return redirect("/")
-        flash('Você precisar entrar em uma conta para editar algo.')
+        flash('Você precisa entrar em uma conta para editar algo.')
     else:
         if request.method == 'POST':
             try:
@@ -553,7 +625,7 @@ def user_edit_main():
             except Exception as e:
                 print(e)
             else:
-                conn = get_db_connection_login()
+                conn = get_db_connection("user")
                 conn.execute(
                     'UPDATE user SET profile = ?, name = ?'
                     ' WHERE id = ?',
@@ -565,5 +637,9 @@ def user_edit_main():
                 flash('Informações de usuário atualizadas com sucesso')
 
     return render_template('user-edit-main.html', user=user[0], gravatar=gravatar(user[1]), id=user[2], profile=user[3])
+
+@app.route('/discord')
+def discord():
+  return redirect('https://discord.gg/hhwxP474wz')
 
 app.run("0.0.0.0", 8080)
